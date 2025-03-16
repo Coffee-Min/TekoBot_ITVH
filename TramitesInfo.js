@@ -6,6 +6,7 @@ class TramitesInfo {
                 // Saludos
                 "hola": "¿Desea ver el menú de los posibles trámites? Responde 'sí' para continuar.",
                 "si": "MENU:<br>◾Inglés<br>◾Constancias<br>◾Reposición de credencial<br>◾SIE<br>◾Reinscripción<br>◾Bajas de Materias<br>◾Baja Temporal<br>◾Justificante por Inasistencia<br>◾Actividades Complementarias<br>◾Titulación<br>◾Cambio de Carrera<br>◾Cursos de Verano<br>◾Traslado a ITVH",
+                "Menu": "MENU:<br>◾Inglés<br>◾Constancias<br>◾Reposición de credencial<br>◾SIE<br>◾Reinscripción<br>◾Bajas de Materias<br>◾Baja Temporal<br>◾Justificante por Inasistencia<br>◾Actividades Complementarias<br>◾Titulación<br>◾Cambio de Carrera<br>◾Cursos de Verano<br>◾Traslado a ITVH",
                 "tramites": "MENU:<br>◾Inglés<br>◾Constancias<br>◾Reposición de credencial<br>◾SIE<br>◾Reinscripción<br>◾Bajas de Materias<br>◾Baja Temporal<br>◾Justificante por Inasistencia<br>◾Actividades Complementarias<br>◾Titulación<br>◾Cambio de Carrera<br>◾Cursos de Verano<br>◾Traslado a ITVH",
                 "buenos días": "¡Buenos días! ¿En qué puedo ayudarte hoy?",
                 "buenas tardes": "¡Buenas tardes! ¿En qué puedo ayudarte hoy?",
@@ -20,7 +21,6 @@ class TramitesInfo {
                 "bienvenido": "¡Gracias! ¿En qué puedo ayudarte hoy?",
                 "qué trámites hay": "Estos son los trámites disponibles: Inglés, Constancias, Reposición de credencial, SIE, Reinscripción, Bajas de Materias, Baja Temporal, Justificante por Inasistencia, Actividades Complementarias, Titulación, Cambio de Carrera, Cursos de Verano y Traslado a ITVH. Responde 'sí' para más detalles.",
                 "ayuda": "Claro, estoy aquí para ayudarte. ¿Qué trámite necesitas?",
-                "menú": "Aquí tienes el menú de trámites: Inglés, Constancias, Reposición de credencial, SIE, Reinscripción, Bajas de Materias, Baja Temporal, Justificante por Inasistencia, Actividades Complementarias, Titulación, Cambio de Carrera, Cursos de Verano y Traslado a ITVH. Responde 'sí' para más detalles.",
                 "qué necesito": "Dime qué trámite necesitas y te guiaré paso a paso.",
                 "cómo empezar": "Puedes empezar diciéndome qué trámite necesitas o respondiendo 'sí' para ver el menú.",
                 "qué opciones tengo": "Puedes elegir entre estos trámites: Inglés, Constancias, Reposición de credencial, SIE, Reinscripción, Bajas de Materias, Baja Temporal, Justificante por Inasistencia, Actividades Complementarias, Titulación, Cambio de Carrera, Cursos de Verano y Traslado a ITVH. Responde 'sí' para más detalles.",
