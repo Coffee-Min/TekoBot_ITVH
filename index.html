@@ -1,0 +1,451 @@
+<!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TekoBot - Asistente de Trámites</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; 
+            background-image: url('FONDOCHAT.png'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0); 
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .chat-container {
+            background-color: rgba(52, 73, 94, 0.8); 
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%; 
+            max-width: 500px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: rgba(236, 240, 241, 0.9); 
+            color: black;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        
+        .user-message {
+            background-color: #2980B9;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            align-self: flex-end; 
+        }
+
+        .chatbot-message {
+            background-color: #FFFFFF;
+            color: black;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            align-self: flex-start; 
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: rgba(10, 42, 75, 0.8); 
+            border-radius: 0 0 15px 15px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #2980B9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .input-container button:hover {
+            background-color: #3498DB;
+        }
+
+        .options-container {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 0 10px 10px 10px; 
+            max-height: 150px;
+            overflow-y: auto;
+            position: relative; 
+            top: -10px; 
+        }
+
+        .options-container div {
+            padding: 5px;
+            cursor: pointer;
+            color: black;
+        }
+
+        .options-container div:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h1>TekoBot <br> Asistente de Trámites</h1>
+
+    <div class="chat-container">
+        <div class="chat-area" id="chat-area">
+            <div class="chatbot-message">🤖 TekoBot: ¡Hola! Soy TekoBot. ¿En qué puedo ayudarte hoy?</div>
+        </div>
+
+        <div class="options-container" id="options-container"></div>
+
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje..." oninput="mostrarOpciones()" />
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const tramitesInfo = {
+            //Saludos
+            "hola": "¿Desea ver el menú de los posibles trámites? Responde 'sí' para continuar.",
+            "si": "MENU:<br>◾Inglés<br>◾Constancias<br>◾Reposición de credencial<br>◾SIE<br>◾Reinscripción",
+            "tramites": "MENU:<br>◾Inglés<br>◾Constancias<br>◾Reposición de credencial<br>◾SIE<br>◾Reinscripción",
+            "buenos días": "¡Buenos días! ¿En qué puedo ayudarte hoy?",
+            "buenas tardes": "¡Buenas tardes! ¿En qué puedo ayudarte hoy?",
+            "buenas noches": "¡Buenas noches! ¿En qué puedo ayudarte hoy?",
+            "qué tal": "¡Hola! Estoy aquí para ayudarte. ¿En qué puedo colaborarte?",
+            "cómo estás": "¡Hola! Estoy muy bien, gracias por preguntar. ¿En qué puedo ayudarte?",
+            "quién eres": "Soy TekoBot, tu asistente virtual para trámites. ¿En qué puedo ayudarte?",
+            "qué puedes hacer": "Puedo ayudarte con información sobre trámites. Responde 'sí' para ver el menú.",
+            "gracias": "¡De nada! Estoy aquí para ayudarte. ¿Necesitas algo más?",
+            "adiós": "¡Hasta luego! Si necesitas más ayuda, no dudes en volver.",
+            "hasta luego": "¡Nos vemos! Recuerda que estoy aquí para ayudarte cuando lo necesites.",
+            "bienvenido": "¡Gracias! ¿En qué puedo ayudarte hoy?",
+            "qué trámites hay": "Estos son los trámites disponibles: Inglés, Constancias, Reposición de credencial, SIE y Reinscripción. Responde 'sí' para más detalles.",
+            "ayuda": "Claro, estoy aquí para ayudarte. ¿Qué trámite necesitas?",
+            "menú": "Aquí tienes el menú de trámites: Inglés, Constancias, Reposición de credencial, SIE y Reinscripción. Responde 'sí' para más detalles.",
+            "qué necesito": "Dime qué trámite necesitas y te guiaré paso a paso.",
+            "cómo empezar": "Puedes empezar diciéndome qué trámite necesitas o respondiendo 'sí' para ver el menú.",
+            "qué opciones tengo": "Puedes elegir entre estos trámites: Inglés, Constancias, Reposición de credencial, SIE y Reinscripción. Responde 'sí' para más detalles.",
+            "qué más puedes hacer": "Además de ayudarte con trámites, puedo darte información sobre fechas, requisitos y procesos. ¿Qué necesitas?",
+            "qué es tecobot": "Soy TekoBot, tu asistente virtual para trámites en el Tecnológico, creado por el Equipo 1. ¿En qué puedo ayudarte?",
+            //tramites            
+            "ingles": "¿Qué desea saber de inglés?<br>◾Pago de módulos<br>◾Dónde pagar<br>◾Proceso de pago<br>◾Dónde entregar el comprobante<br>◾Inscripción al examen de colocación<br>◾Lugar del examen de colocación<br>◾Fecha del examen de colocación<br>◾Requisitos para el examen de colocación",
+            "pago de modulos": "Para pagar los módulos de inglés, debes realizar el pago en el banco y llevar el comprobante a la oficina de Servicios Escolares.",
+            "dónde pagar": "Debes realizar el pago en el banco y llevar el comprobante a la oficina de Servicios Escolares.",
+            "proceso de pago": "Deberás bajar la referencia en el sistema de referencias bancarias (SRB) de la página del Tecnológico dentro del SWS.",
+            "dónde entregar el comprobante": "El comprobante debe ser entregado en la oficina de Servicios Escolares.",
+            "inscripción al examen de colocación": "Para inscribirte al examen de colocación, dirígete a la oficina de idiomas y presenta tu credencial.",
+            "lugar del examen de colocación": "El examen de colocación se realiza en la institución, generalmente en el primer semestre. Acércate a la oficina de idiomas para más detalles.",
+            "fecha del examen de colocación": "El examen de colocación se realiza en el primer semestre. Pregunta en el departamento de Lenguas Extranjeras por la fecha exacta.",
+            "requisitos para el examen de colocación": "Necesitas presentar tu credencial en la oficina de idiomas para inscribirte.",
+            "constancias": "¿Qué desea saber de Constancias?<br>◾Obtención de constancia de complementarias<br>◾Dónde obtener la constancia de complementarias<br>◾Requisitos para la constancia de complementarias<br>◾Obtención de constancia de estudios<br>◾Documentos para constancia de estudios",
+            "obtención de constancia de complementarias": "La constancia de complementarias se obtiene solicitando una cita en el Departamento de Actividades Extraescolares, llevando tus actividades registradas.",
+            "dónde obtener la constancia de complementarias": "La constancia de complementarias se solicita en el Departamento de Actividades Extraescolares.",
+            "requisitos para la constancia de complementarias": "Debes llevar tus actividades registradas y solicitar una cita en el Departamento de Actividades Extraescolares.",
+            "obtención de constancia de estudios": "Puedes solicitar tu constancia de estudios en la ventanilla de Servicios Escolares, proporcionando tu matrícula y una identificación.",
+            "documentos para constancia de estudios": "Debes presentar tu matrícula y una identificación oficial para solicitar tu constancia de estudios.",
+            "reposicioncredencial": "¿Qué desea saber sobre Reposición de credencial?<br>◾Proceso de reposición de credencial<br>◾Dónde reponer credencial<br>◾Documentos para reponer credencial",
+            "proceso de reposición de credencial": "Para reponer tu credencial, acude a la Secretaría Administrativa con una foto reciente y una identificación oficial.",
+            "dónde reponer credencial": "Debes acudir a la Secretaría Administrativa con una foto reciente y una identificación oficial.",
+            "documentos para reponer credencial": "Necesitas una foto reciente y una identificación oficial para reponer tu credencial.",
+            "sie": "¿Qué desea saber sobre el SIE?<br>◾Uso del SIE para trámites<br>◾Qué trámites se pueden hacer en el SIE<br>◾Dónde pedir ayuda sobre el SIE",
+            "uso del sie para trámites": "El SIE es una plataforma en línea que te permite realizar varios trámites. Si tienes problemas, puedes solicitar ayuda en la oficina de Sistemas.",
+            "qué trámites se pueden hacer en el sie": "En el SIE puedes realizar trámites como reinscripción, consulta de calificaciones y otros procesos administrativos.",
+            "dónde pedir ayuda sobre el sie": "Si tienes problemas con el SIE, puedes solicitar ayuda en la oficina de Sistemas.",
+            "reinscripcion": "¿Qué desea saber sobre Reinscripción?<br>◾Reinscripción a la universidad<br>◾Fecha de reinscripción<br>◾Cómo registrar materias para la reinscripción",
+            "reinscripción a la universidad": "La reinscripción se realiza en línea a través del SIE. Recuerda realizar los pagos antes de registrar tus materias.",
+            "fecha de reinscripción": "La reinscripción debe realizarse en las fechas asignadas por la universidad. Revisa el calendario académico para conocer las fechas exactas.",
+            "cómo registrar materias para la reinscripción": "Debes registrar tus materias a través del SIE después de haber realizado los pagos correspondientes."
+        };
+
+        function obtenerRespuesta(tramite) {
+            tramite = tramite.toLowerCase();
+            return tramitesInfo[tramite] || null;
+        }
+
+        function mostrarOpciones() {
+            const userInput = document.getElementById("user-input").value.trim().toLowerCase();
+            const optionsContainer = document.getElementById("options-container");
+        
+            if (!userInput) {
+                optionsContainer.style.display = "none";
+                return;
+            }
+        
+            const opciones = Object.keys(tramitesInfo)
+                .filter(key => key.startsWith(userInput)) 
+                .sort((a, b) => a.localeCompare(b)); 
+        
+            if (opciones.length > 0) {
+                optionsContainer.innerHTML = opciones.map(opcion => `<div onclick="seleccionarOpcion('${opcion}')">${opcion}</div>`).join("");
+                optionsContainer.style.display = "block";
+            } else {
+                optionsContainer.style.display = "none";
+            }
+        }
+        function seleccionarOpcion(opcion) {
+            document.getElementById("user-input").value = opcion;
+           // document.getElementById("options-container").style.display = "none";
+            enviarMensaje();
+        }
+
+        function enviarMensaje() {
+            document.getElementById("options-container").style.display = "none";
+            const userInput = document.getElementById("user-input").value.trim();
+            if (!userInput) return;
+
+            const chatArea = document.getElementById("chat-area");
+
+            chatArea.innerHTML += `<div class="user-message">🐆 Tú: ${userInput}</div>`;
+            document.getElementById("user-input").value = "";
+
+            let respuesta = obtenerRespuesta(userInput);
+            if (!respuesta) {
+                respuesta = "Lo siento, no tengo información sobre eso. ¿Puedes ser más específico?";
+            }
+
+            chatArea.innerHTML += `<div class="chatbot-message">🤖 TekoBot: ${respuesta}</div>`;
+
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TekoBot - Asistente de Trámites</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column; 
+            background-image: url('FONDOCHAT.png'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: rgba(0, 0, 0, 0); 
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .chat-container {
+            background-color: rgba(52, 73, 94, 0.8); 
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%; 
+            max-width: 500px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: rgba(236, 240, 241, 0.9); 
+            color: black;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-message {
+            background-color: #2980B9;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            align-self: flex-end; 
+        }
+
+        .chatbot-message {
+            background-color: #FFFFFF;
+            color: black;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 70%;
+            align-self: flex-start; 
+        }
+
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: rgba(10, 42, 75, 0.8); 
+            border-radius: 0 0 15px 15px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .input-container button {
+            padding: 10px 20px;
+            background-color: #2980B9;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .input-container button:hover {
+            background-color: #3498DB;
+        }
+
+        .options-container {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 0 10px 10px 10px; 
+            max-height: 150px;
+            overflow-y: auto;
+            position: relative; 
+            top: -10px; 
+        }
+
+        .options-container div {
+            padding: 5px;
+            cursor: pointer;
+            color: black;
+        }
+
+        .options-container div:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script src="TramitesInfo.js"></script> <!-- Importa la clase TramitesInfo -->
+</head>
+<body>
+    <h1>TekoBot <br> Asistente de Trámites</h1>
+
+    <div class="chat-container">
+        <div class="chat-area" id="chat-area">
+            <div class="chatbot-message">🤖 TekoBot: ¡Hola! Soy TekoBot. ¿En qué puedo ayudarte hoy?</div>
+        </div>
+
+        <div class="options-container" id="options-container"></div>
+
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje..." oninput="mostrarOpciones()" />
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const tramitesInfo = new TramitesInfo(); // Crea una instancia de la clase TramitesInfo
+
+        function mostrarOpciones() {
+            const userInput = document.getElementById("user-input").value.trim().toLowerCase();
+            const optionsContainer = document.getElementById("options-container");
+        
+            if (!userInput) {
+                optionsContainer.style.display = "none";
+                return;
+            }
+        
+            const opciones = Object.keys(tramitesInfo.tramites)
+                .filter(key => key.startsWith(userInput)) 
+                .sort((a, b) => a.localeCompare(b)); 
+        
+            if (opciones.length > 0) {
+                optionsContainer.innerHTML = opciones.map(opcion => `<div onclick="seleccionarOpcion('${opcion}')">${opcion}</div>`).join("");
+                optionsContainer.style.display = "block";
+            } else {
+                optionsContainer.style.display = "none";
+            }
+        }
+
+        function seleccionarOpcion(opcion) {
+            document.getElementById("user-input").value = opcion;
+            enviarMensaje();
+        }
+
+        function enviarMensaje() {
+            document.getElementById("options-container").style.display = "none";
+            const userInput = document.getElementById("user-input").value.trim();
+            if (!userInput) return;
+
+            const chatArea = document.getElementById("chat-area");
+
+            chatArea.innerHTML += `<div class="user-message">🐆 Tú: ${userInput}</div>`;
+            document.getElementById("user-input").value = "";
+
+            let respuesta = tramitesInfo.obtenerRespuesta(userInput); // Usa la instancia de TramitesInfo
+            if (!respuesta) {
+                respuesta = "Lo siento, no tengo información sobre eso. ¿Puedes ser más específico?";
+            }
+
+            chatArea.innerHTML += `<div class="chatbot-message">🤖 TekoBot: ${respuesta}</div>`;
+
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>
